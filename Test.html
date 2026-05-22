@@ -1,0 +1,2686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechForge | PC Building & Tech Reviews</title>
+
+    <!-- Google Fonts: Inter for body, Orbitron for headings -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* ===== CSS VARIABLES - Change colors here ===== */
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: rgba(18, 18, 26, 0.6);
+            --accent: #00FF88; /* Main neon green - change this for theme */
+            --accent-glow: rgba(0, 255, 136, 0.4);
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0b0;
+            --border: rgba(255, 255, 255, 0.1);
+            --glass-blur: blur(12px);
+        }
+
+        /* ===== RESET & BASE STYLES ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth; /* Enables smooth scroll for nav links */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+        }
+
+        /* ===== UTILITY CLASSES ===== */
+       .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+       .section {
+            padding: 100px 0;
+            opacity: 0; /* For fade-in animation */
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+       .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+       .section-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 60px;
+            color: var(--accent);
+            text-shadow: 0 0 20px var(--accent-glow);
+        }
+
+       .btn {
+            background: transparent;
+            border: 2px solid var(--accent);
+            color: var(--accent);
+            padding: 12px 28px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+       .btn:hover {
+            background: var(--accent);
+            color: var(--bg-primary);
+            box-shadow: 0 0 25px var(--accent-glow); /* Button hover glow effect */
+            transform: translateY(-2px);
+        }
+
+        /* ===== GLASSMORPHISM CARD STYLE ===== */
+       .glass-card {
+            background: var(--bg-card);
+            backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 30px;
+            transition: all 0.3s ease;
+        }
+
+       .glass-card:hover {
+            border-color: var(--accent);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        /* ===== NAVIGATION BAR ===== */
+        nav {
+            position: fixed; /* Sticky nav requirement */
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: var(--glass-blur);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            padding: 15px 0;
+        }
+
+       .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+       .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: var(--accent);
+            text-shadow: 0 0 15px var(--accent-glow);
+        }
+
+       .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+       .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+       .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        /* Mobile hamburger menu */
+       .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+        }
+
+       .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: var(--accent);
+            transition: 0.3s;
+        }
+
+        /* ===== HERO SECTION + PARTICLES ===== */
+        #home {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Particle background container */
+        #particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+       .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+       .hero-content h1 {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+       .hero-content p {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Typing effect cursor */
+       .typing-cursor {
+            border-right: 3px solid var(--accent);
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            50% { border-color: transparent; }
+        }
+
+        /* ===== GUIDES SECTION ===== */
+       .guides-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+       .guide-card h3 {
+            color: var(--accent);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+       .guide-price {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 20px 0;
+            color: var(--text-primary);
+        }
+
+        /* ===== COMPONENT TABS ===== */
+       .tabs {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 40px;
+        }
+
+       .tab-btn {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+       .tab-btn.active,.tab-btn:hover {
+            background: var(--accent);
+            color: var(--bg-primary);
+            border-color: var(--accent);
+        }
+
+       .tab-content {
+            display: none;
+        }
+
+       .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+       .component-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        /* ===== REVIEWS SECTION ===== */
+       .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+       .review-card h4 {
+            margin-bottom: 10px;
+        }
+
+       .stars {
+            color: #FFD700;
+            margin-bottom: 15px;
+        }
+
+       .benchmark-bar {
+            background: var(--bg-secondary);
+            height: 8px;
+            border-radius: 4px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+       .benchmark-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), #00ccff);
+            border-radius: 4px;
+            transition: width 1s ease;
+        }
+
+        /* ===== BUILD CALCULATOR ===== */
+       .calculator {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+       .calc-row {
+            margin-bottom: 20px;
+        }
+
+       .calc-row label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+       .calc-row select {
+            width: 100%;
+            padding: 12px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+       .total-price {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 2.5rem;
+            font-family: 'Orbitron', sans-serif;
+            color: var(--accent);
+        }
+
+        /* ===== CONTACT FORM ===== */
+       .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+       .form-group {
+            margin-bottom: 20px;
+        }
+
+       .form-group input,
+       .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+        }
+
+       .form-group input:focus,
+       .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+       .error-msg {
+            color: #ff4444;
+            font-size: 0.9rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            padding: 60px 0 30px;
+        }
+
+       .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+       .social-links {
+            display: flex;
+            gap: 15px;
+        }
+
+       .social-links a {
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+       .social-links a:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* ===== MOBILE RESPONSIVE ===== */
+        @media (max-width: 768px) {
+           .nav-links {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                flex-direction: column;
+                background: rgba(10, 10, 15, 0.95);
+                width: 100%;
+                text-align: center;
+                transition: 0.3s;
+                padding: 20px 0;
+            }
+
+           .nav-links.active {
+                left: 0;
+            }
+
+           .hamburger {
+                display: flex;
+            }
+
+           .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+           .section-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ===== NAVIGATION ===== -->
+    <nav>
+        <div class="container nav-container">
+            <div class="logo">TechForge</div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#guides">Guides</a></li>
+                <li><a href="#components">Components</a></li>
+                <li><a href="#reviews">Reviews</a></li>
+                <li><a href="#build-tool">Build Tool</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ===== HERO SECTION ===== -->
+    <section id="home">
+        <canvas id="particles"></canvas> <!-- Particle background renders here -->
+        <div class="container hero-content">
+            <h1>Build Your Dream <span id="typing-text" class="typing-cursor"></span></h1>
+            <p>Expert guides, honest reviews, and tools to forge the ultimate PC. From budget builds to RGB monsters.</p>
+            <a href="#build-tool" class="btn">Start Building</a>
+        </div>
+    </section>
+
+    <!-- ===== GUIDES SECTION ===== -->
+    <section id="guides" class="section">
+        <div class="container">
+            <h2 class="section-title">PC Building Guides</h2>
+            <div class="guides-grid">
+                <div class="glass-card guide-card">
+                    <h3>Beginner Build</h3>
+                    <p>Perfect for 1080p gaming and school work. Great performance without breaking the bank.</p>
+                    <div class="guide-price">$650</div>
+                    <button class="btn" onclick="alert('Beginner Build: Ryzen 5 5600 + RTX 4060 + 16GB RAM. Full guide coming soon!')">View Guide</button>
+                </div>
+                <div class="glass-card guide-card">
+                    <h3>Mid-Range Beast</h3>
+                    <p>1440p gaming at high refresh rates. Stream and create content with no compromises.</p>
+                    <div class="guide-price">$1200</div>
+                    <button class="btn" onclick="alert('Mid-Range Build: Ryzen 7 7700X + RTX 4070 Super + 32GB DDR5. Full guide coming soon!')">View Guide</button>
+                </div>
+                <div class="glass-card guide-card">
+                    <h3>Pro Workstation</h3>
+                    <p>4K gaming, 3D rendering, and AI workloads. The absolute best money can buy.</p>
+                    <div class="guide-price">$3000+</div>
+                    <button class="btn" onclick="alert('Pro Build: Threadripper + RTX 4090 + 128GB RAM. Contact us for custom quotes!')">View Guide</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== COMPONENT BREAKDOWN ===== -->
+    <section id="components" class="section">
+        <div class="container">
+            <h2 class="section-title">Component Breakdown</h2>
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="cpu">CPU</button>
+                <button class="tab-btn" data-tab="gpu">GPU</button>
+                <button class="tab-btn" data-tab="ram">RAM</button>
+                <button class="tab-btn" data-tab="storage">Storage</button>
+                <button class="tab-btn" data-tab="mobo">Motherboard</button>
+            </div>
+
+            <div id="cpu" class="tab-content active">
+                <div class="component-list">
+                    <div class="glass-card"><h4>AMD Ryzen 5 7600X</h4><p>6-core beast for gaming. $229</p></div>
+                    <div class="glass-card"><h4>Intel i7-14700K</h4><p>20-core hybrid for productivity. $399</p></div>
+                    <div class="glass-card"><h4>AMD Ryzen 7 7800X3D</h4><p>Best gaming CPU. $449</p></div>
+                </div>
+            </div>
+            <div id="gpu" class="tab-content">
+                <div class="component-list">
+                    <div class="glass-card"><h4>NVIDIA RTX 4060</h4><p>1080p king with DLSS 3. $299</p></div>
+                    <div class="glass-card"><h4>AMD RX 7800 XT</h4><p>1440p value champion. $499</p></div>
+                    <div class="glass-card"><h4>NVIDIA RTX 4090</h4><p>4K ultra no compromises. $1599</p></div>
+                </div>
+            </div>
+            <div id="ram" class="tab-content">
+                <div class="component-list">
+                    <div class="glass-card"><h4>16GB DDR4 3200</h4><p>Budget standard. $45</p></div>
+                    <div class="glass-card"><h4>32GB DDR5 6000</h4><p>Sweet spot for modern builds. $110</p></div>
+                    <div class="glass-card"><h4>64GB DDR5 6400</h4><p>For creators & heavy multitasking. $220</p></div>
+                </div>
+            </div>
+            <div id="storage" class="tab-content">
+                <div class="component-list">
+                    <div class="glass-card"><h4>1TB NVMe Gen4</h4><p>7000 MB/s for OS + games. $80</p></div>
+                    <div class="glass-card"><h4>2TB NVMe Gen4</h4><p>Best capacity/speed balance. $140</p></div>
+                    <div class="glass-card"><h4>4TB SATA SSD</h4><p>Mass game storage. $200</p></div>
+                </div>
+            </div>
+            <div id="mobo" class="tab-content">
+                <div class="component-list">
+                    <div class="glass-card"><h4>B650 AM5</h4><p>Budget DDR5 platform. $150</p></div>
+                    <div class="glass-card"><h4>Z790 Intel</h4><p>Full features for 14th gen. $250</p></div>
+                    <div class="glass-card"><h4>X670E AM5</h4><p>Enthusiast PCIe 5.0 everything. $350</p></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== REVIEWS SECTION ===== -->
+    <section id="reviews" class="section">
+        <div class="container">
+            <h2 class="section-title">Featured Reviews</h2>
+            <div class="reviews-grid">
+                <div class="glass-card review-card">
+                    <h4>RTX 4070 Super</h4>
+                    <div class="stars">★★★★★</div>
+                    <p>The 1440p price-to-performance king. DLSS 3 is black magic.</p>
+                    <div class="benchmark-bar"><div class="benchmark-fill" style="width: 92%"></div></div>
+                    <small>Gaming Performance: 92/100</small>
+                    <button class="btn" style="margin-top:15px;" onclick="alert('Full review: 15% faster than 4070, $599 MSRP. Worth it!')">Read Full Review</button>
+                </div>
+                <div class="glass-card review-card">
+                    <h4>Ryzen 7 7800X3D</h4>
+                    <div class="stars">★★★★★</div>
+                    <p>Nothing beats it in gaming. 3D V-Cache is unfair.</p>
+                    <div class="benchmark-bar"><div class="benchmark-fill" style="width: 98%"></div></div>
+                    <small>Gaming Performance: 98/100</small>
+                    <button class="btn" style="margin-top:15px;" onclick="alert('Full review: Beats i9-14900K in games while using half the power.')">Read Full Review</button>
+                </div>
+                <div class="glass-card review-card">
+                    <h4>Samsung 990 Pro 2TB</h4>
+                    <div class="stars">★★★★☆</div>
+                    <p>Gen4 speed without Gen5 heat. Expensive but reliable.</p>
+                    <div class="benchmark-bar"><div class="benchmark-fill" style="width: 88%"></div></div>
+                    <small>Storage Performance: 88/100</small>
+                    <button class="btn" style="margin-top:15px;" onclick="alert('Full review: 7450 MB/s read. Best OS drive for creators.')">Read Full Review</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== BUILD CALCULATOR ===== -->
+    <section id="build-tool" class="section">
+        <div class="container">
+            <h2 class="section-title">PC Build Cost Calculator</h2>
+            <div class="glass-card calculator">
+                <div class="calc-row">
+                    <label>CPU</label>
+                    <select id="cpu-select" onchange="calculateTotal()">
+                        <option value="0">Select CPU</option>
+                        <option value="229">Ryzen 5 7600X - $229</option>
+                        <option value="399">Intel i7-14700K - $399</option>
+                        <option value="449">Ryzen 7 7800X3D - $449</option>
+                    </select>
+                </div>
+                <div class="calc-row">
+                    <label>GPU</label>
+                    <select id="gpu-select" onchange="calculateTotal()">
+                        <option value="0">Select GPU</option>
+                        <option value="299">RTX 4060 - $299</option>
+                        <option value="499">RX 7800 XT - $499</option>
+                        <option value="1599">RTX 4090 - $1599</option>
+                    </select>
+                </div>
+                <div class="calc-row">
+                    <label>RAM</label>
+                    <select id="ram-select" onchange="calculateTotal()">
+                        <option value="0">Select RAM</option>
+                        <option value="45">16GB DDR4 - $45</option>
+                        <option value="110">32GB DDR5 - $110</option>
+                        <option value="220">64GB DDR5 - $220</option>
+                    </select>
+                </div>
+                <div class="calc-row">
+                    <label>Storage</label>
+                    <select id="storage-select" onchange="calculateTotal()">
+                        <option value="0">Select Storage</option>
+                        <option value="80">1TB NVMe - $80</option>
+                        <option value="140">2TB NVMe - $140</option>
+                        <option value="200">4TB SSD - $200</option>
+                    </select>
+                </div>
+                <div class="total-price">Total: $<span id="total">0</span></div>
+                <button class="btn" style="width:100%; margin-top:20px;" onclick="alert('Build saved! Email this list to yourself or share with friends.')">Save Build</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== CONTACT FORM ===== -->
+    <section id="contact" class="section">
+        <div class="container">
+            <h2 class="section-title">Contact TechForge</h2>
+            <form class="glass-card contact-form" id="contactForm">
+                <div class="form-group">
+                    <input type="text" id="name" placeholder="Your Name">
+                    <div class="error-msg" id="nameError">Name is required</div>
+                </div>
+                <div class="form-group">
+                    <input type="email" id="email" placeholder="Your Email">
+                    <div class="error-msg" id="emailError">Valid email is required</div>
+                </div>
+                <div class="form-group">
+                    <textarea id="message" rows="5" placeholder="Your Message"></textarea>
+                    <div class="error-msg" id="messageError">Message is required</div>
+                </div>
+                <button type="submit" class="btn" style="width:100%;">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <div class="logo">TechForge</div>
+                    <p style="color:var(--text-secondary); margin-top:15px;">Forging the future of PC building, one component at a time.</p>
+                </div>
+                <div>
+                    <h4 style="margin-bottom:15px;">Links</h4>
+                    <p><a href="#guides" style="color:var(--text-secondary); text-decoration:none;">Guides</a></p>
+                    <p><a href="#reviews" style="color:var(--text-secondary); text-decoration:none;">Reviews</a></p>
+                    <p><a href="#build-tool" style="color:var(--text-secondary); text-decoration:none;">Build Tool</a></p>
+                </div>
+                <div>
+                    <h4 style="margin-bottom:15px;">Social</h4>
+                    <div class="social-links">
+                        <a href="#" onclick="alert('Twitter/X link')">X</a>
+                        <a href="#" onclick="alert('YouTube link')">YT</a>
+                        <a href="#" onclick="alert('Discord link')">DC</a>
+                    </div>
+                </div>
+                <div>
+                    <h4 style="margin-bottom:15px;">Newsletter</h4>
+                    <input type="email" placeholder="Your email" style="width:100%; padding:10px; background:var(--bg-primary); border:1px solid var(--border); border-radius:8px; color:var(--text-primary); margin-bottom:10px;">
+                    <button class="btn" style="width:100%;" onclick="alert('Thanks for subscribing!')">Subscribe</button>
+                </div>
+            </div>
+            <p style="text-align:center; color:var(--text-secondary); border-top:1px solid var(--border); padding-top:30px;">© 2026 TechForge. Built for demo purposes.</p>
+        </div>
+    </footer>
+
+    <script>
+        /* ===== TYPING EFFECT FOR HERO ===== */
+        const typingText = document.getElementById('typing-text');
+        const words = ['PC', 'Rig', 'Battle Station', 'Workstation'];
+        let wordIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+
+        function type() {
+            const currentWord = words[wordIndex];
+            if (isDeleting) {
+                typingText.textContent = currentWord.substring(0, charIndex - 1);
+                charIndex--;
+            } else {
+                typingText.textContent = currentWord.substring(0, charIndex + 1);
+                charIndex++;
+            }
+
+            if (!isDeleting && charIndex === currentWord.length) {
+                isDeleting = true;
+                setTimeout(type, 2000); // Pause at end
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                wordIndex = (wordIndex + 1) % words.length;
+                setTimeout(type, 500);
+            } else {
+                setTimeout(type, isDeleting? 50 : 100);
+            }
+        }
+        type(); // Start typing effect
+
+        /* ===== PARTICLE BACKGROUND - Pure JS, no libraries ===== */
+        const canvas = document.getElementById('particles');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particles = [];
+        const particleCount = 80;
+
+        // Create particles
+        for (let i = 0; i < particleCount; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                vx: (Math.random() - 0.5) * 0.5,
+                vy: (Math.random() - 0.5) * 0.5,
+                radius: Math.random() * 2
+            });
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent');
+
+            particles.forEach(p => {
+                p.x += p.vx;
+                p.y += p.vy;
+
+                // Bounce off edges
+                if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        // Resize canvas on window resize
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        /* ===== MOBILE HAMBURGER MENU ===== */
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Close menu when link clicked
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => navLinks.classList.remove('active'));
+        });
+
+        /* ===== FADE-IN ON SCROLL ===== */
+        const sections = document.querySelectorAll('.section');
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        sections.forEach(section => observer.observe(section));
+
+        /* ===== COMPONENT TABS LOGIC ===== */
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tab = btn.dataset.tab;
+
+                // Remove active from all
+                tabBtns.forEach(b => b.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
+
+                // Add active to clicked
+                btn.classList.add('active');
+                document.getElementById(tab).classList.add('active');
+            });
+        });
+
+        /* ===== BUILD CALCULATOR ===== */
+        function calculateTotal() {
+            const cpu = parseInt(document.getElementById('cpu-select').value);
+            const gpu = parseInt(document.getElementById('gpu-select').value);
+            const ram = parseInt(document.getElementById('ram-select').value);
+            const storage = parseInt(document.getElementById('storage-select').value);
+            const total = cpu + gpu + ram + storage;
+            document.getElementById('total').textContent = total;
+        }
+
+        /* ===== CONTACT FORM VALIDATION ===== */
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            let valid = true;
+
+            // Name validation
+            const name = document.getElementById('name');
+            const nameError = document.getElementById('nameError');
+            if (name.value.trim() === '') {
+                nameError.style.display = 'block';
+                valid = false;
+            } else {
+                nameError.style.display = 'none';
+            }
+
+            // Email validation
+            const email = document.getElementById('email');
+            const emailError = document.getElementById('emailError');
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email.value)) {
+                emailError.style.display = 'block';
+                valid = false;
+            } else {
+                emailError.style.display = 'none';
+            }
+
+            // Message validation
+            const message = document.getElementById('message');
+            const messageError = document.getElementById('messageError');
+            if (message.value.trim() === '') {
+                messageError.style.display = 'block';
+                valid = false;
+            } else {
+                messageError.style.display = 'none';
+            }
+
+            if (valid) {
+                alert('Message sent! We will get back to you soon.');
+                this.reset();
+            }
+        });
+
+        /* ===== RGB EASTER EGG ===== */
+        let typedKeys = '';
+        let rgbMode = false;
+        let hue = 0;
+
+        document.addEventListener('keydown', (e) => {
+            typedKeys += e.key.toLowerCase();
+            if (typedKeys.includes('rgb')) {
+                rgbMode =!rgbMode;
+                typedKeys = ''; // Reset
+                if (rgbMode) {
+                    alert('RGB MODE ACTIVATED 🌈');
+                    cycleColor();
+                } else {
+                    document.documentElement.style.setProperty('--accent', '#00FF88');
+                    alert('RGB MODE OFF');
+                }
+            }
+            // Keep only last 10 keys to prevent memory issues
+            if (typedKeys.length > 10) typedKeys = typedKeys.slice(-10);
+        });
+
+        function cycleColor() {
+            if (!rgbMode) return;
+            hue = (hue + 2) % 360;
+            document.documentElement.style.setProperty('--accent', `hsl(${hue}, 100%, 50%)`);
+            requestAnimationFrame(cycleColor);
+        }
+    </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechForge | PC Building & Tech Reviews</title>
+
+    <!-- Google Fonts: Inter for body, Orbitron for headings -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* ===== CSS VARIABLES - Change colors here ===== */
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: rgba(18, 18, 26, 0.6);
+            --accent: #00FF88; /* Main neon green - change this for theme */
+            --accent-glow: rgba(0, 255, 136, 0.4);
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0b0;
+            --border: rgba(255, 255, 255, 0.1);
+            --glass-blur: blur(12px);
+        }
+
+        /* ===== RESET & BASE STYLES ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth; /* Enables smooth scroll for nav links */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+        }
+
+        /* ===== UTILITY CLASSES ===== */
+       .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+       .section {
+            padding: 100px 0;
+            opacity: 0; /* For fade-in animation */
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+       .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+       .section-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 60px;
+            color: var(--accent);
+            text-shadow: 0 0 20px var(--accent-glow);
+        }
+
+       .btn {
+            background: transparent;
+            border: 2px solid var(--accent);
+            color: var(--accent);
+            padding: 12px 28px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+       .btn:hover {
+            background: var(--accent);
+            color: var(--bg-primary);
+            box-shadow: 0 0 25px var(--accent-glow); /* Button hover glow effect */
+            transform: translateY(-2px);
+        }
+
+        /* ===== GLASSMORPHISM CARD STYLE ===== */
+       .glass-card {
+            background: var(--bg-card);
+            backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 30px;
+            transition: all 0.3s ease;
+        }
+
+       .glass-card:hover {
+            border-color: var(--accent);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        /* ===== NAVIGATION BAR ===== */
+        nav {
+            position: fixed; /* Sticky nav requirement */
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: var(--glass-blur);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            padding: 15px 0;
+        }
+
+       .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+       .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: var(--accent);
+            text-shadow: 0 0 15px var(--accent-glow);
+        }
+
+       .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+       .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+       .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        /* Mobile hamburger menu */
+       .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+        }
+
+       .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: var(--accent);
+            transition: 0.3s;
+        }
+
+        /* ===== HERO SECTION + PARTICLES ===== */
+        #home {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Particle background container */
+        #particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+       .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+       .hero-content h1 {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+       .hero-content p {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Typing effect cursor */
+       .typing-cursor {
+            border-right: 3px solid var(--accent);
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            50% { border-color: transparent; }
+        }
+
+        /* ===== GUIDES SECTION ===== */
+       .guides-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+       .guide-card h3 {
+            color: var(--accent);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+       .guide-price {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 20px 0;
+            color: var(--text-primary);
+        }
+
+        /* ===== COMPONENT TABS ===== */
+       .tabs {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 40px;
+        }
+
+       .tab-btn {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+       .tab-btn.active,.tab-btn:hover {
+            background: var(--accent);
+            color: var(--bg-primary);
+            border-color: var(--accent);
+        }
+
+       .tab-content {
+            display: none;
+        }
+
+       .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+       .component-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        /* ===== REVIEWS SECTION ===== */
+       .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+       .review-card h4 {
+            margin-bottom: 10px;
+        }
+
+       .stars {
+            color: #FFD700;
+            margin-bottom: 15px;
+        }
+
+       .benchmark-bar {
+            background: var(--bg-secondary);
+            height: 8px;
+            border-radius: 4px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+       .benchmark-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), #00ccff);
+            border-radius: 4px;
+            transition: width 1s ease;
+        }
+
+        /* ===== BUILD CALCULATOR ===== */
+       .calculator {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+       .calc-row {
+            margin-bottom: 20px;
+        }
+
+       .calc-row label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+       .calc-row select {
+            width: 100%;
+            padding: 12px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+       .total-price {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 2.5rem;
+            font-family: 'Orbitron', sans-serif;
+            color: var(--accent);
+        }
+
+        /* ===== CONTACT FORM ===== */
+       .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+       .form-group {
+            margin-bottom: 20px;
+        }
+
+       .form-group input,
+       .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+        }
+
+       .form-group input:focus,
+       .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+       .error-msg {
+            color: #ff4444;
+            font-size: 0.9rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            padding: 60px 0 30px;
+        }
+
+       .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+       .social-links {
+            display: flex;
+            gap: 15px;
+        }
+
+       .social-links a {
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+       .social-links a:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* ===== MOBILE RESPONSIVE ===== */
+        @media (max-width: 768px) {
+           .nav-links {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                flex-direction: column;
+                background: rgba(10, 10, 15, 0.95);
+                width: 100%;
+                text-align: center;
+                transition: 0.3s;
+                padding: 20px 0;
+            }
+
+           .nav-links.active {
+                left: 0;
+            }
+
+           .hamburger {
+                display: flex;
+            }
+
+           .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+           .section-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ===== NAVIGATION ===== -->
+    <nav>
+        <div class="container nav-container">
+            <div class="logo">TechForge</div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#guides">Guides</a></li>
+                <li><a href="#components">Components</a></li>
+                <li><a href="#reviews">Reviews</a></li>
+                <li><a href="#build-tool">Build Tool</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ===== HERO SECTION ===== -->
+    <section id="home">
+        <canvas id="particles"></canvas> <!-- Particle background renders here -->
+        <div class="container hero-content">
+            <h1>Build Your Dream <span id="typing-text" class="typing-cursor"></span></h1>
+            <p>Expert guides, honest reviews, and tools to forge the ultimate PC. From budget builds to RGB monsters.</p>
+            <a href="#build-tool" class="btn">Start Building</a>
+        </div>
+    </section>
+
+    <!-- ===== GUIDES SECTION ===== -->
+    <section id="guides" class="section">
+        <div class="container">
+            <h2 class="section-title">PC Building Guides</h2>
+            <div class="guides-grid">
+                <div class="glass-card guide-card">
+                    <h3>Beginner Build</h3>
+                    <p>Perfect for 1080p gaming and school work. Great performance without breaking the bank.</p>
+                    <div class="guide-price">$650</div>
+                    <button class="btn" onclick="alert('Beginner Build: Ryzen 5 5600 + RTX 4060 + 16GB RAM. Full guide coming soon!')">View Guide</button>
+                </div>
+                <div class="glass-card guide-card">
+                    <h3>Mid-Range Beast</h3>
+                    <p>1440p gaming at high refresh rates. Stream and create content with no compromises.</p>
+                    <div class="guide-price">$1200</div>
+                    <button class="btn" onclick="alert('Mid-Range Build: Ryzen 7 7700X + RTX 4070 Super + 32GB DDR5. Full guide coming soon!')">View Guide</button>
+                </div>
+                <div class="glass-card guide-card">
+                    <h3>Pro Workstation</h3>
+                    <p>4K gaming, 3D rendering, and AI workloads. The absolute best money can buy.</p>
+                    <div class="guide-price">$3000+</div>
+                    <button class="btn" onclick="alert('Pro Build: Threadripper + RTX 4090 + 128GB RAM. Contact us for custom quotes!')">View Guide</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== COMPONENT BREAKDOWN ===== -->
+    <section id="components" class="section">
+        <div class="container">
+            <h2 class="section-title">Component Breakdown</h2>
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="cpu">CPU</button>
+                <button class="tab-btn" data-tab="gpu">GPU</button>
+                <button class="tab-btn" data-tab="ram">RAM</button>
+                <button class="tab-btn" data-tab="storage">Storage</button>
+                <button class="tab-btn" data-tab="mobo">Motherboard</button>
+            </div>
+
+            <div id="cpu" class="tab-content active">
+                <div class="component-list">
+                    <div class="glass-card"><h4>AMD Ryzen 5 7600X</h4><p>6-core beast for gaming. $229</p></div>
+                    <div class="glass-card"><h4>Intel i7-14700K</h4><p>20-core hybrid for productivity. $399</p></div>
+                    <div class="glass-card"><h4>AMD Ryzen 7 7800X3D</h4><p>Best gaming CPU. $449</p></div>
+                </div>
+            </div>
+            <div id="gpu" class="tab-content">
+                <div class="component-list">
+                    <div class="glass-card"><h4>NVIDIA RTX 4060</h4><p>1080p king with DLSS 3. $299</p></div>
+                    <div class="glass-card"><h4>AMD RX 7800 XT</h4><p>1440p value champion. $499</p></div>
+                    <div class="glass-card"><h4>NVIDIA RTX 4090</h4><p>4K ultra no compromises. $1599</p></div>
+                </div>
+            </div>
+            <div id="ram" class="tab-content">
+                <div class="component-list">
+                    <div class="glass-card"><h4>16GB DDR4 3200</h4><p>Budget standard. $45</p></div>
+                    <div class="glass-card"><h4>32GB DDR5 6000</h4><p>Sweet spot for modern builds. $110</p></div>
+                    <div class="glass-card"><h4>64GB DDR5 6400</h4><p>For creators & heavy multitasking. $220</p></div>
+                </div>
+            </div>
+            <div id="storage" class="tab-content">
+                <div class="component-list">
+                    <div class="glass-card"><h4>1TB NVMe Gen4</h4><p>7000 MB/s for OS + games. $80</p></div>
+                    <div class="glass-card"><h4>2TB NVMe Gen4</h4><p>Best capacity/speed balance. $140</p></div>
+                    <div class="glass-card"><h4>4TB SATA SSD</h4><p>Mass game storage. $200</p></div>
+                </div>
+            </div>
+            <div id="mobo" class="tab-content">
+                <div class="component-list">
+                    <div class="glass-card"><h4>B650 AM5</h4><p>Budget DDR5 platform. $150</p></div>
+                    <div class="glass-card"><h4>Z790 Intel</h4><p>Full features for 14th gen. $250</p></div>
+                    <div class="glass-card"><h4>X670E AM5</h4><p>Enthusiast PCIe 5.0 everything. $350</p></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== REVIEWS SECTION ===== -->
+    <section id="reviews" class="section">
+        <div class="container">
+            <h2 class="section-title">Featured Reviews</h2>
+            <div class="reviews-grid">
+                <div class="glass-card review-card">
+                    <h4>RTX 4070 Super</h4>
+                    <div class="stars">★★★★★</div>
+                    <p>The 1440p price-to-performance king. DLSS 3 is black magic.</p>
+                    <div class="benchmark-bar"><div class="benchmark-fill" style="width: 92%"></div></div>
+                    <small>Gaming Performance: 92/100</small>
+                    <button class="btn" style="margin-top:15px;" onclick="alert('Full review: 15% faster than 4070, $599 MSRP. Worth it!')">Read Full Review</button>
+                </div>
+                <div class="glass-card review-card">
+                    <h4>Ryzen 7 7800X3D</h4>
+                    <div class="stars">★★★★★</div>
+                    <p>Nothing beats it in gaming. 3D V-Cache is unfair.</p>
+                    <div class="benchmark-bar"><div class="benchmark-fill" style="width: 98%"></div></div>
+                    <small>Gaming Performance: 98/100</small>
+                    <button class="btn" style="margin-top:15px;" onclick="alert('Full review: Beats i9-14900K in games while using half the power.')">Read Full Review</button>
+                </div>
+                <div class="glass-card review-card">
+                    <h4>Samsung 990 Pro 2TB</h4>
+                    <div class="stars">★★★★☆</div>
+                    <p>Gen4 speed without Gen5 heat. Expensive but reliable.</p>
+                    <div class="benchmark-bar"><div class="benchmark-fill" style="width: 88%"></div></div>
+                    <small>Storage Performance: 88/100</small>
+                    <button class="btn" style="margin-top:15px;" onclick="alert('Full review: 7450 MB/s read. Best OS drive for creators.')">Read Full Review</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== BUILD CALCULATOR ===== -->
+    <section id="build-tool" class="section">
+        <div class="container">
+            <h2 class="section-title">PC Build Cost Calculator</h2>
+            <div class="glass-card calculator">
+                <div class="calc-row">
+                    <label>CPU</label>
+                    <select id="cpu-select" onchange="calculateTotal()">
+                        <option value="0">Select CPU</option>
+                        <option value="229">Ryzen 5 7600X - $229</option>
+                        <option value="399">Intel i7-14700K - $399</option>
+                        <option value="449">Ryzen 7 7800X3D - $449</option>
+                    </select>
+                </div>
+                <div class="calc-row">
+                    <label>GPU</label>
+                    <select id="gpu-select" onchange="calculateTotal()">
+                        <option value="0">Select GPU</option>
+                        <option value="299">RTX 4060 - $299</option>
+                        <option value="499">RX 7800 XT - $499</option>
+                        <option value="1599">RTX 4090 - $1599</option>
+                    </select>
+                </div>
+                <div class="calc-row">
+                    <label>RAM</label>
+                    <select id="ram-select" onchange="calculateTotal()">
+                        <option value="0">Select RAM</option>
+                        <option value="45">16GB DDR4 - $45</option>
+                        <option value="110">32GB DDR5 - $110</option>
+                        <option value="220">64GB DDR5 - $220</option>
+                    </select>
+                </div>
+                <div class="calc-row">
+                    <label>Storage</label>
+                    <select id="storage-select" onchange="calculateTotal()">
+                        <option value="0">Select Storage</option>
+                        <option value="80">1TB NVMe - $80</option>
+                        <option value="140">2TB NVMe - $140</option>
+                        <option value="200">4TB SSD - $200</option>
+                    </select>
+                </div>
+                <div class="total-price">Total: $<span id="total">0</span></div>
+                <button class="btn" style="width:100%; margin-top:20px;" onclick="alert('Build saved! Email this list to yourself or share with friends.')">Save Build</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== CONTACT FORM ===== -->
+    <section id="contact" class="section">
+        <div class="container">
+            <h2 class="section-title">Contact TechForge</h2>
+            <form class="glass-card contact-form" id="contactForm">
+                <div class="form-group">
+                    <input type="text" id="name" placeholder="Your Name">
+                    <div class="error-msg" id="nameError">Name is required</div>
+                </div>
+                <div class="form-group">
+                    <input type="email" id="email" placeholder="Your Email">
+                    <div class="error-msg" id="emailError">Valid email is required</div>
+                </div>
+                <div class="form-group">
+                    <textarea id="message" rows="5" placeholder="Your Message"></textarea>
+                    <div class="error-msg" id="messageError">Message is required</div>
+                </div>
+                <button type="submit" class="btn" style="width:100%;">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <div class="logo">TechForge</div>
+                    <p style="color:var(--text-secondary); margin-top:15px;">Forging the future of PC building, one component at a time.</p>
+                </div>
+                <div>
+                    <h4 style="margin-bottom:15px;">Links</h4>
+                    <p><a href="#guides" style="color:var(--text-secondary); text-decoration:none;">Guides</a></p>
+                    <p><a href="#reviews" style="color:var(--text-secondary); text-decoration:none;">Reviews</a></p>
+                    <p><a href="#build-tool" style="color:var(--text-secondary); text-decoration:none;">Build Tool</a></p>
+                </div>
+                <div>
+                    <h4 style="margin-bottom:15px;">Social</h4>
+                    <div class="social-links">
+                        <a href="#" onclick="alert('Twitter/X link')">X</a>
+                        <a href="#" onclick="alert('YouTube link')">YT</a>
+                        <a href="#" onclick="alert('Discord link')">DC</a>
+                    </div>
+                </div>
+                <div>
+                    <h4 style="margin-bottom:15px;">Newsletter</h4>
+                    <input type="email" placeholder="Your email" style="width:100%; padding:10px; background:var(--bg-primary); border:1px solid var(--border); border-radius:8px; color:var(--text-primary); margin-bottom:10px;">
+                    <button class="btn" style="width:100%;" onclick="alert('Thanks for subscribing!')">Subscribe</button>
+                </div>
+            </div>
+            <p style="text-align:center; color:var(--text-secondary); border-top:1px solid var(--border); padding-top:30px;">© 2026 TechForge. Built for demo purposes.</p>
+        </div>
+    </footer>
+
+    <script>
+        /* ===== TYPING EFFECT FOR HERO ===== */
+        const typingText = document.getElementById('typing-text');
+        const words = ['PC', 'Rig', 'Battle Station', 'Workstation'];
+        let wordIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+
+        function type() {
+            const currentWord = words[wordIndex];
+            if (isDeleting) {
+                typingText.textContent = currentWord.substring(0, charIndex - 1);
+                charIndex--;
+            } else {
+                typingText.textContent = currentWord.substring(0, charIndex + 1);
+                charIndex++;
+            }
+
+            if (!isDeleting && charIndex === currentWord.length) {
+                isDeleting = true;
+                setTimeout(type, 2000); // Pause at end
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                wordIndex = (wordIndex + 1) % words.length;
+                setTimeout(type, 500);
+            } else {
+                setTimeout(type, isDeleting? 50 : 100);
+            }
+        }
+        type(); // Start typing effect
+
+        /* ===== PARTICLE BACKGROUND - Pure JS, no libraries ===== */
+        const canvas = document.getElementById('particles');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particles = [];
+        const particleCount = 80;
+
+        // Create particles
+        for (let i = 0; i < particleCount; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                vx: (Math.random() - 0.5) * 0.5,
+                vy: (Math.random() - 0.5) * 0.5,
+                radius: Math.random() * 2
+            });
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent');
+
+            particles.forEach(p => {
+                p.x += p.vx;
+                p.y += p.vy;
+
+                // Bounce off edges
+                if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        // Resize canvas on window resize
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        /* ===== MOBILE HAMBURGER MENU ===== */
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Close menu when link clicked
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => navLinks.classList.remove('active'));
+        });
+
+        /* ===== FADE-IN ON SCROLL ===== */
+        const sections = document.querySelectorAll('.section');
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        sections.forEach(section => observer.observe(section));
+
+        /* ===== COMPONENT TABS LOGIC ===== */
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tab = btn.dataset.tab;
+
+                // Remove active from all
+                tabBtns.forEach(b => b.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
+
+                // Add active to clicked
+                btn.classList.add('active');
+                document.getElementById(tab).classList.add('active');
+            });
+        });
+
+        /* ===== BUILD CALCULATOR ===== */
+        function calculateTotal() {
+            const cpu = parseInt(document.getElementById('cpu-select').value);
+            const gpu = parseInt(document.getElementById('gpu-select').value);
+            const ram = parseInt(document.getElementById('ram-select').value);
+            const storage = parseInt(document.getElementById('storage-select').value);
+            const total = cpu + gpu + ram + storage;
+            document.getElementById('total').textContent = total;
+        }
+
+        /* ===== CONTACT FORM VALIDATION ===== */
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            let valid = true;
+
+            // Name validation
+            const name = document.getElementById('name');
+            const nameError = document.getElementById('nameError');
+            if (name.value.trim() === '') {
+                nameError.style.display = 'block';
+                valid = false;
+            } else {
+                nameError.style.display = 'none';
+            }
+
+            // Email validation
+            const email = document.getElementById('email');
+            const emailError = document.getElementById('emailError');
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email.value)) {
+                emailError.style.display = 'block';
+                valid = false;
+            } else {
+                emailError.style.display = 'none';
+            }
+
+            // Message validation
+            const message = document.getElementById('message');
+            const messageError = document.getElementById('messageError');
+            if (message.value.trim() === '') {
+                messageError.style.display = 'block';
+                valid = false;
+            } else {
+                messageError.style.display = 'none';
+            }
+
+            if (valid) {
+                alert('Message sent! We will get back to you soon.');
+                this.reset();
+            }
+        });
+
+        /* ===== RGB EASTER EGG ===== */
+        let typedKeys = '';
+        let rgbMode = false;
+        let hue = 0;
+
+        document.addEventListener('keydown', (e) => {
+            typedKeys += e.key.toLowerCase();
+            if (typedKeys.includes('rgb')) {
+                rgbMode =!rgbMode;
+                typedKeys = ''; // Reset
+                if (rgbMode) {
+                    alert('RGB MODE ACTIVATED 🌈');
+                    cycleColor();
+                } else {
+                    document.documentElement.style.setProperty('--accent', '#00FF88');
+                    alert('RGB MODE OFF');
+                }
+            }
+            // Keep only last 10 keys to prevent memory issues
+            if (typedKeys.length > 10) typedKeys = typedKeys.slice(-10);
+        });
+
+        function cycleColor() {
+            if (!rgbMode) return;
+            hue = (hue + 2) % 360;
+            document.documentElement.style.setProperty('--accent', `hsl(${hue}, 100%, 50%)`);
+            requestAnimationFrame(cycleColor);
+        }
+    </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechForge | PC Building & Tech Reviews</title>
+
+    <!-- Google Fonts: Inter for body, Orbitron for headings -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* ===== CSS VARIABLES - Change colors here ===== */
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: rgba(18, 18, 26, 0.6);
+            --accent: #00FF88; /* Main neon green - change this for theme */
+            --accent-glow: rgba(0, 255, 136, 0.4);
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0b0;
+            --border: rgba(255, 255, 255, 0.1);
+            --glass-blur: blur(12px);
+        }
+
+        /* ===== RESET & BASE STYLES ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth; /* Enables smooth scroll for nav links */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+        }
+
+        /* ===== UTILITY CLASSES ===== */
+       .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+       .section {
+            padding: 100px 0;
+            opacity: 0; /* For fade-in animation */
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+       .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+       .section-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 60px;
+            color: var(--accent);
+            text-shadow: 0 0 20px var(--accent-glow);
+        }
+
+       .btn {
+            background: transparent;
+            border: 2px solid var(--accent);
+            color: var(--accent);
+            padding: 12px 28px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+       .btn:hover {
+            background: var(--accent);
+            color: var(--bg-primary);
+            box-shadow: 0 0 25px var(--accent-glow); /* Button hover glow effect */
+            transform: translateY(-2px);
+        }
+
+        /* ===== GLASSMORPHISM CARD STYLE ===== */
+       .glass-card {
+            background: var(--bg-card);
+            backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 30px;
+            transition: all 0.3s ease;
+        }
+
+       .glass-card:hover {
+            border-color: var(--accent);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        /* ===== NAVIGATION BAR ===== */
+        nav {
+            position: fixed; /* Sticky nav requirement */
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: var(--glass-blur);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            padding: 15px 0;
+        }
+
+       .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+       .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: var(--accent);
+            text-shadow: 0 0 15px var(--accent-glow);
+        }
+
+       .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+       .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+       .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        /* Mobile hamburger menu */
+       .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+        }
+
+       .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: var(--accent);
+            transition: 0.3s;
+        }
+
+        /* ===== HERO SECTION + PARTICLES ===== */
+        #home {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Particle background container */
+        #particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+       .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+       .hero-content h1 {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+       .hero-content p {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Typing effect cursor */
+       .typing-cursor {
+            border-right: 3px solid var(--accent);
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            50% { border-color: transparent; }
+        }
+
+        /* ===== GUIDES SECTION ===== */
+       .guides-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+       .guide-card h3 {
+            color: var(--accent);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+       .guide-price {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 20px 0;
+            color: var(--text-primary);
+        }
+
+        /* ===== COMPONENT TABS ===== */
+       .tabs {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 40px;
+        }
+
+       .tab-btn {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+       .tab-btn.active,.tab-btn:hover {
+            background: var(--accent);
+            color: var(--bg-primary);
+            border-color: var(--accent);
+        }
+
+       .tab-content {
+            display: none;
+        }
+
+       .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+       .component-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        /* ===== REVIEWS SECTION ===== */
+       .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+       .review-card h4 {
+            margin-bottom: 10px;
+        }
+
+       .stars {
+            color: #FFD700;
+            margin-bottom: 15px;
+        }
+
+       .benchmark-bar {
+            background: var(--bg-secondary);
+            height: 8px;
+            border-radius: 4px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+       .benchmark-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), #00ccff);
+            border-radius: 4px;
+            transition: width 1s ease;
+        }
+
+        /* ===== BUILD CALCULATOR ===== */
+       .calculator {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+       .calc-row {
+            margin-bottom: 20px;
+        }
+
+       .calc-row label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+       .calc-row select {
+            width: 100%;
+            padding: 12px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+       .total-price {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 2.5rem;
+            font-family: 'Orbitron', sans-serif;
+            color: var(--accent);
+        }
+
+        /* ===== CONTACT FORM ===== */
+       .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+       .form-group {
+            margin-bottom: 20px;
+        }
+
+       .form-group input,
+       .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+        }
+
+       .form-group input:focus,
+       .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+       .error-msg {
+            color: #ff4444;
+            font-size: 0.9rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            padding: 60px 0 30px;
+        }
+
+       .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+       .social-links {
+            display: flex;
+            gap: 15px;
+        }
+
+       .social-links a {
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+       .social-links a:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* ===== MOBILE RESPONSIVE ===== */
+        @media (max-width: 768px) {
+           .nav-links {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                flex-direction: column;
+                background: rgba(10, 10, 15, 0.95);
+                width: 100%;
+                text-align: center;
+                transition: 0.3s;
+                padding: 20px 0;
+            }
+
+           .nav-links.active {
+                left: 0;
+            }
+
+           .hamburger {
+                display: flex;
+            }
+
+           .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+           .section-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ===== NAVIGATION ===== -->
+    <nav>
+        <div class="container nav-container">
+            <div class="logo">TechForge</div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#guides">Guides</a></li>
+                <li><a href="#components">Components</a></li>
+                <li><a href="#reviews">Reviews</a></li>
+                <li><a href="#build-tool">Build Tool</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ===== HERO SECTION ===== -->
+    <section id="home">
+        <canvas id="particles"></canvas> <!-- Particle background renders here -->
+        <div class="container hero-content">
+            <h1>Build Your Dream <span id="typing-text" class="typing-cursor"></span></h1>
+            <p>Expert guides, honest reviews, and tools to forge the ultimate PC. From budget builds to RGB monsters.</p>
+            <a href="#build-tool" class="btn">Start Building</a>
+        </div>
+    </section>
+
+    <!-- ===== GUIDES SECTION ===== -->
+    <section id="guides" class="section">
+        <div class="container">
+            <h2 class="section-title">PC Building Guides</h2>
+            <div class="guides-grid">
+                <div class="glass-card guide-card">
+                    <h3>Beginner Build</h3>
+                    <p>Perfect for 1080p gaming and school work. Great performance without breaking the bank.</p>
+                    <div class="guide-price">$650</div>
+                    <button class="btn" onclick="alert('Beginner Build: Ryzen 5 5600 + RTX 4060 + 16GB RAM. Full guide coming soon!')">View Guide</button>
+                </div>
+                <div class="glass-card guide-card">
+                    <h3>Mid-Range Beast</h3>
+                    <p>1440p gaming at high refresh rates. Stream and create content with no compromises.</p>
+                    <div class="guide-price">$1200</div>
+                    <button class="btn" onclick="alert('Mid-Range Build: Ryzen 7 7700X + RTX 4070 Super + 32GB DDR5. Full guide coming soon!')">View Guide</button>
+                </div>
+                <div class="glass-card guide-card">
+                    <h3>Pro Workstation</h3>
+                    <p>4K gaming, 3D rendering, and AI workloads. The absolute best money can buy.</p>
+                    <div class="guide-price">$3000+</div>
+                    <button class="btn" onclick="alert('Pro Build: Threadripper + RTX 4090 + 128GB RAM. Contact us for custom quotes!')">View Guide</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== COMPONENT BREAKDOWN ===== -->
+    <section id="components" class="section">
+        <div class="container">
+            <h2 class="section-title">Component Breakdown</h2>
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="cpu">CPU</button>
+                <button class="tab-btn" data-tab="gpu">GPU</button>
+                <button class="tab-btn" data-tab="ram">RAM</button>
+                <button class="tab-btn" data-tab="storage">Storage</button>
+                <button class="tab-btn" data-tab="mobo">Motherboard</button>
+            </div>
+
+            <div id="cpu" class="tab-content active">
+                <div class="component-list">
+                    <div class="glass-card"><h4>AMD Ryzen 5 7600X</h4><p>6-core beast for gaming. $229</p></div>
+                    <div class="glass-card"><h4>Intel i7-14700K</h4><p>20-core hybrid for productivity. $399</p></div>
+                    <div class="glass-card"><h4>AMD Ryzen 7 7800X3D</h4><p>Best gaming CPU. $449</p></div>
+                </div>
+            </div>
+            <div id="gpu" class="tab-content">
+                <div class="component-list">
+                    <div class="glass-card"><h4>NVIDIA RTX 4060</h4><p>1080p king with DLSS 3. $299</p></div>
+                    <div class="glass-card"><h4>AMD RX 7800 XT</h4><p>1440p value champion. $499</p></div>
+                    <div class="glass-card"><h4>NVIDIA RTX 4090</h4><p>4K ultra no compromises. $1599</p></div>
+                </div>
+            </div>
+            <div id="ram" class="tab-content">
+                <div class="component-list">
+                    <div class="glass-card"><h4>16GB DDR4 3200</h4><p>Budget standard. $45</p></div>
+                    <div class="glass-card"><h4>32GB DDR5 6000</h4><p>Sweet spot for modern builds. $110</p></div>
+                    <div class="glass-card"><h4>64GB DDR5 6400</h4><p>For creators & heavy multitasking. $220</p></div>
+                </div>
+            </div>
+            <div id="storage" class="tab-content">
+                <div class="component-list">
+                    <div class="glass-card"><h4>1TB NVMe Gen4</h4><p>7000 MB/s for OS + games. $80</p></div>
+                    <div class="glass-card"><h4>2TB NVMe Gen4</h4><p>Best capacity/speed balance. $140</p></div>
+                    <div class="glass-card"><h4>4TB SATA SSD</h4><p>Mass game storage. $200</p></div>
+                </div>
+            </div>
+            <div id="mobo" class="tab-content">
+                <div class="component-list">
+                    <div class="glass-card"><h4>B650 AM5</h4><p>Budget DDR5 platform. $150</p></div>
+                    <div class="glass-card"><h4>Z790 Intel</h4><p>Full features for 14th gen. $250</p></div>
+                    <div class="glass-card"><h4>X670E AM5</h4><p>Enthusiast PCIe 5.0 everything. $350</p></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== REVIEWS SECTION ===== -->
+    <section id="reviews" class="section">
+        <div class="container">
+            <h2 class="section-title">Featured Reviews</h2>
+            <div class="reviews-grid">
+                <div class="glass-card review-card">
+                    <h4>RTX 4070 Super</h4>
+                    <div class="stars">★★★★★</div>
+                    <p>The 1440p price-to-performance king. DLSS 3 is black magic.</p>
+                    <div class="benchmark-bar"><div class="benchmark-fill" style="width: 92%"></div></div>
+                    <small>Gaming Performance: 92/100</small>
+                    <button class="btn" style="margin-top:15px;" onclick="alert('Full review: 15% faster than 4070, $599 MSRP. Worth it!')">Read Full Review</button>
+                </div>
+                <div class="glass-card review-card">
+                    <h4>Ryzen 7 7800X3D</h4>
+                    <div class="stars">★★★★★</div>
+                    <p>Nothing beats it in gaming. 3D V-Cache is unfair.</p>
+                    <div class="benchmark-bar"><div class="benchmark-fill" style="width: 98%"></div></div>
+                    <small>Gaming Performance: 98/100</small>
+                    <button class="btn" style="margin-top:15px;" onclick="alert('Full review: Beats i9-14900K in games while using half the power.')">Read Full Review</button>
+                </div>
+                <div class="glass-card review-card">
+                    <h4>Samsung 990 Pro 2TB</h4>
+                    <div class="stars">★★★★☆</div>
+                    <p>Gen4 speed without Gen5 heat. Expensive but reliable.</p>
+                    <div class="benchmark-bar"><div class="benchmark-fill" style="width: 88%"></div></div>
+                    <small>Storage Performance: 88/100</small>
+                    <button class="btn" style="margin-top:15px;" onclick="alert('Full review: 7450 MB/s read. Best OS drive for creators.')">Read Full Review</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== BUILD CALCULATOR ===== -->
+    <section id="build-tool" class="section">
+        <div class="container">
+            <h2 class="section-title">PC Build Cost Calculator</h2>
+            <div class="glass-card calculator">
+                <div class="calc-row">
+                    <label>CPU</label>
+                    <select id="cpu-select" onchange="calculateTotal()">
+                        <option value="0">Select CPU</option>
+                        <option value="229">Ryzen 5 7600X - $229</option>
+                        <option value="399">Intel i7-14700K - $399</option>
+                        <option value="449">Ryzen 7 7800X3D - $449</option>
+                    </select>
+                </div>
+                <div class="calc-row">
+                    <label>GPU</label>
+                    <select id="gpu-select" onchange="calculateTotal()">
+                        <option value="0">Select GPU</option>
+                        <option value="299">RTX 4060 - $299</option>
+                        <option value="499">RX 7800 XT - $499</option>
+                        <option value="1599">RTX 4090 - $1599</option>
+                    </select>
+                </div>
+                <div class="calc-row">
+                    <label>RAM</label>
+                    <select id="ram-select" onchange="calculateTotal()">
+                        <option value="0">Select RAM</option>
+                        <option value="45">16GB DDR4 - $45</option>
+                        <option value="110">32GB DDR5 - $110</option>
+                        <option value="220">64GB DDR5 - $220</option>
+                    </select>
+                </div>
+                <div class="calc-row">
+                    <label>Storage</label>
+                    <select id="storage-select" onchange="calculateTotal()">
+                        <option value="0">Select Storage</option>
+                        <option value="80">1TB NVMe - $80</option>
+                        <option value="140">2TB NVMe - $140</option>
+                        <option value="200">4TB SSD - $200</option>
+                    </select>
+                </div>
+                <div class="total-price">Total: $<span id="total">0</span></div>
+                <button class="btn" style="width:100%; margin-top:20px;" onclick="alert('Build saved! Email this list to yourself or share with friends.')">Save Build</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== CONTACT FORM ===== -->
+    <section id="contact" class="section">
+        <div class="container">
+            <h2 class="section-title">Contact TechForge</h2>
+            <form class="glass-card contact-form" id="contactForm">
+                <div class="form-group">
+                    <input type="text" id="name" placeholder="Your Name">
+                    <div class="error-msg" id="nameError">Name is required</div>
+                </div>
+                <div class="form-group">
+                    <input type="email" id="email" placeholder="Your Email">
+                    <div class="error-msg" id="emailError">Valid email is required</div>
+                </div>
+                <div class="form-group">
+                    <textarea id="message" rows="5" placeholder="Your Message"></textarea>
+                    <div class="error-msg" id="messageError">Message is required</div>
+                </div>
+                <button type="submit" class="btn" style="width:100%;">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <div class="logo">TechForge</div>
+                    <p style="color:var(--text-secondary); margin-top:15px;">Forging the future of PC building, one component at a time.</p>
+                </div>
+                <div>
+                    <h4 style="margin-bottom:15px;">Links</h4>
+                    <p><a href="#guides" style="color:var(--text-secondary); text-decoration:none;">Guides</a></p>
+                    <p><a href="#reviews" style="color:var(--text-secondary); text-decoration:none;">Reviews</a></p>
+                    <p><a href="#build-tool" style="color:var(--text-secondary); text-decoration:none;">Build Tool</a></p>
+                </div>
+                <div>
+                    <h4 style="margin-bottom:15px;">Social</h4>
+                    <div class="social-links">
+                        <a href="#" onclick="alert('Twitter/X link')">X</a>
+                        <a href="#" onclick="alert('YouTube link')">YT</a>
+                        <a href="#" onclick="alert('Discord link')">DC</a>
+                    </div>
+                </div>
+                <div>
+                    <h4 style="margin-bottom:15px;">Newsletter</h4>
+                    <input type="email" placeholder="Your email" style="width:100%; padding:10px; background:var(--bg-primary); border:1px solid var(--border); border-radius:8px; color:var(--text-primary); margin-bottom:10px;">
+                    <button class="btn" style="width:100%;" onclick="alert('Thanks for subscribing!')">Subscribe</button>
+                </div>
+            </div>
+            <p style="text-align:center; color:var(--text-secondary); border-top:1px solid var(--border); padding-top:30px;">© 2026 TechForge. Built for demo purposes.</p>
+        </div>
+    </footer>
+
+    <script>
+        /* ===== TYPING EFFECT FOR HERO ===== */
+        const typingText = document.getElementById('typing-text');
+        const words = ['PC', 'Rig', 'Battle Station', 'Workstation'];
+        let wordIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+
+        function type() {
+            const currentWord = words[wordIndex];
+            if (isDeleting) {
+                typingText.textContent = currentWord.substring(0, charIndex - 1);
+                charIndex--;
+            } else {
+                typingText.textContent = currentWord.substring(0, charIndex + 1);
+                charIndex++;
+            }
+
+            if (!isDeleting && charIndex === currentWord.length) {
+                isDeleting = true;
+                setTimeout(type, 2000); // Pause at end
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                wordIndex = (wordIndex + 1) % words.length;
+                setTimeout(type, 500);
+            } else {
+                setTimeout(type, isDeleting? 50 : 100);
+            }
+        }
+        type(); // Start typing effect
+
+        /* ===== PARTICLE BACKGROUND - Pure JS, no libraries ===== */
+        const canvas = document.getElementById('particles');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particles = [];
+        const particleCount = 80;
+
+        // Create particles
+        for (let i = 0; i < particleCount; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                vx: (Math.random() - 0.5) * 0.5,
+                vy: (Math.random() - 0.5) * 0.5,
+                radius: Math.random() * 2
+            });
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent');
+
+            particles.forEach(p => {
+                p.x += p.vx;
+                p.y += p.vy;
+
+                // Bounce off edges
+                if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        // Resize canvas on window resize
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        /* ===== MOBILE HAMBURGER MENU ===== */
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Close menu when link clicked
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => navLinks.classList.remove('active'));
+        });
+
+        /* ===== FADE-IN ON SCROLL ===== */
+        const sections = document.querySelectorAll('.section');
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        sections.forEach(section => observer.observe(section));
+
+        /* ===== COMPONENT TABS LOGIC ===== */
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tab = btn.dataset.tab;
+
+                // Remove active from all
+                tabBtns.forEach(b => b.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
+
+                // Add active to clicked
+                btn.classList.add('active');
+                document.getElementById(tab).classList.add('active');
+            });
+        });
+
+        /* ===== BUILD CALCULATOR ===== */
+        function calculateTotal() {
+            const cpu = parseInt(document.getElementById('cpu-select').value);
+            const gpu = parseInt(document.getElementById('gpu-select').value);
+            const ram = parseInt(document.getElementById('ram-select').value);
+            const storage = parseInt(document.getElementById('storage-select').value);
+            const total = cpu + gpu + ram + storage;
+            document.getElementById('total').textContent = total;
+        }
+
+        /* ===== CONTACT FORM VALIDATION ===== */
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            let valid = true;
+
+            // Name validation
+            const name = document.getElementById('name');
+            const nameError = document.getElementById('nameError');
+            if (name.value.trim() === '') {
+                nameError.style.display = 'block';
+                valid = false;
+            } else {
+                nameError.style.display = 'none';
+            }
+
+            // Email validation
+            const email = document.getElementById('email');
+            const emailError = document.getElementById('emailError');
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email.value)) {
+                emailError.style.display = 'block';
+                valid = false;
+            } else {
+                emailError.style.display = 'none';
+            }
+
+            // Message validation
+            const message = document.getElementById('message');
+            const messageError = document.getElementById('messageError');
+            if (message.value.trim() === '') {
+                messageError.style.display = 'block';
+                valid = false;
+            } else {
+                messageError.style.display = 'none';
+            }
+
+            if (valid) {
+                alert('Message sent! We will get back to you soon.');
+                this.reset();
+            }
+        });
+
+        /* ===== RGB EASTER EGG ===== */
+        let typedKeys = '';
+        let rgbMode = false;
+        let hue = 0;
+
+        document.addEventListener('keydown', (e) => {
+            typedKeys += e.key.toLowerCase();
+            if (typedKeys.includes('rgb')) {
+                rgbMode =!rgbMode;
+                typedKeys = ''; // Reset
+                if (rgbMode) {
+                    alert('RGB MODE ACTIVATED 🌈');
+                    cycleColor();
+                } else {
+                    document.documentElement.style.setProperty('--accent', '#00FF88');
+                    alert('RGB MODE OFF');
+                }
+            }
+            // Keep only last 10 keys to prevent memory issues
+            if (typedKeys.length > 10) typedKeys = typedKeys.slice(-10);
+        });
+
+        function cycleColor() {
+            if (!rgbMode) return;
+            hue = (hue + 2) % 360;
+            document.documentElement.style.setProperty('--accent', `hsl(${hue}, 100%, 50%)`);
+            requestAnimationFrame(cycleColor);
+        }
+    </script>
+</body>
+</html>
